@@ -123,4 +123,4 @@ if (Test-Path $historyPath) {
     Remove-Item $historyPath -Force -ErrorAction SilentlyContinue
 }
 
-Write-Host "[+] 24 hours completed. Script ending." -ForegroundColor Yellow
+Write-Host "[+] 24 hours completed. encapted ebott" -ForegroundColor Yellow
