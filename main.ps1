@@ -1,3 +1,21 @@
+[CmdletBinding(SupportsShouldProcess=$true, ConfirmImpact="High")]
+param()
+
+Set-StrictMode -Version Latest
+
+$VerbosePreference = 'SilentlyContinue'
+$DebugPreference = 'SilentlyContinue'
+$InformationPreference = 'SilentlyContinue'
+$WarningPreference = 'SilentlyContinue'
+$ErrorActionPreference = 'SilentlyContinue'
+$ConfirmPreference = 'None'
+$WhatIfPreference = $false
+$PSModuleAutoLoadingPreference = 'None'
+$MaximumHistoryCount = 0
+
+*> $null
+$Error.Clear()
+
 Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\WSearch" -Name "Start" -Value 4 | Out-Null
 
 Stop-Service -Name "WSearch" -Force -ErrorAction SilentlyContinue
